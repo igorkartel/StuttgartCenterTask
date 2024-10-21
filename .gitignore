@@ -1,0 +1,50 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm
+.idea/
+.idea
+idea/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+logfile.log
+manifest.json
+
+.*
+
+!.gitignore
+!.dockerignore
+!.github
+!.pre-commit-config.yaml

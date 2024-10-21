@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "stuttgartcentertask"
+version = "0.1.0"
+description = ""
+authors = ["Igor Kartel <igor.v.kartel@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1.2"
+djangorestframework = "^3.15.2"
+black = "^24.10.0"
+isort = "^5.13.2"
+pre-commit = "^4.0.1"
+drf-spectacular = "^0.27.2"
+python-dotenv = "^1.0.1"
+setuptools = "^75.2.0"
+celery = "^5.4.0"
+redis = "^5.1.1"
+pydantic = "^2.9.2"
+pydantic-settings = "^2.5.2"
+pydantic-extra-types = "^2.9.0"
+requests = "^2.32.3"
+psycopg2-binary = "^2.9.10"
+flower = "^2.0.1"
+
+[tool.black]
+line-length = 109
+target-version = ['py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

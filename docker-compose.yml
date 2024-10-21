@@ -1,0 +1,93 @@
+version: '3.9'
+
+services:
+
+  wildberries:
+    container_name: wildberries
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    entrypoint: ["/app/docker-entrypoint.sh"]
+    volumes:
+      - .:/app
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./.env
+    depends_on:
+      - db-postgres
+      - celery-wb-worker
+    networks:
+      - wb-network
+
+  db-postgres:
+    container_name: db-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - wb-network
+
+  redis-wb:
+    container_name: redis-wb
+    image: redis:5.0.7-alpine
+    restart: unless-stopped
+    ports:
+      - "6389:6379"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    volumes:
+      - redis_data:/data
+    networks:
+      - wb-network
+
+  celery-wb-worker:
+    container_name: celery-wb-worker
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A config worker -l info -E -n celery@wb_worker
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - db-postgres
+      - redis-wb
+    networks:
+      - wb-network
+
+  flower-wb:
+    container_name: flower-wb
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["/app/flower-entrypoint.sh"]
+    ports:
+      - "5556:5555"
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - celery-wb-worker
+    networks:
+      - wb-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  wb-network:
